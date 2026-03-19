@@ -29,3 +29,8 @@
 
 /* Smooth scroll for anchor targets */
 html { scroll-behavior: smooth; }
+
+/* Respect prefers-reduced-motion for Framer Motion components */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

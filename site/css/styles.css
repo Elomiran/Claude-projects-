@@ -2,7 +2,7 @@
    ELOMIRAN CONSULT — Global Styles
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 /* ── 01. TOKENS ─────────────────────────────────────────── */
 :root {
@@ -25,6 +25,12 @@
 
   /* Typography */
   --font:         'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif:   'Playfair Display', Georgia, 'Times New Roman', serif;
+
+  /* Accent */
+  --gold:         #C9A84C;
+  --gold-dim:     rgba(201, 168, 76, 0.18);
+  --gold-glow:    rgba(201, 168, 76, 0.08);
 
   /* Spacing */
   --sp-2:    2px;
@@ -111,34 +117,40 @@ button {
 
 /* Display — hero only */
 .t-display {
-  font-size: clamp(48px, 7vw, 92px);
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 6.5vw, 88px);
   font-weight: 800;
-  line-height: 1.04;
-  letter-spacing: -0.03em;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  font-optical-sizing: auto;
 }
 
 /* H1 */
 .t-h1 {
-  font-size: clamp(36px, 4.5vw, 60px);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
+  font-family: var(--font-serif);
+  font-size: clamp(34px, 4.2vw, 56px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  font-optical-sizing: auto;
 }
 
 /* H2 */
 .t-h2 {
-  font-size: clamp(28px, 3.2vw, 44px);
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 3vw, 42px);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  font-optical-sizing: auto;
 }
 
 /* H3 */
 .t-h3 {
-  font-size: clamp(20px, 2vw, 28px);
+  font-size: clamp(19px, 1.8vw, 26px);
   font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.015em;
+  line-height: 1.28;
+  letter-spacing: -0.012em;
 }
 
 /* H4 */
@@ -306,6 +318,23 @@ button {
   font-size: 13px;
 }
 
+/* Gold — primary action on dark backgrounds */
+.btn-gold {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+  font-weight: 700;
+}
+.btn-gold:hover {
+  background: #d4b45a;
+  border-color: #d4b45a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(201, 168, 76, 0.35);
+}
+.btn-gold .arrow {
+  transition: transform var(--dur) var(--ease);
+}
+
 
 /* ── 07. HORIZONTAL RULE ─────────────────────────────────── */
 
@@ -360,7 +389,8 @@ button {
   display: flex;
   align-items: center;
   transition: background var(--dur) var(--ease),
-              box-shadow var(--dur) var(--ease);
+              box-shadow var(--dur) var(--ease),
+              backdrop-filter var(--dur) var(--ease);
 }
 
 /* Default: transparent over hero */
@@ -371,8 +401,10 @@ button {
 /* Scrolled or non-hero pages */
 .nav--solid,
 .nav--hero.nav--scrolled {
-  background: var(--ink);
-  box-shadow: 0 1px 0 var(--white-08);
+  background: rgba(28, 27, 24, 0.92);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow: 0 1px 0 var(--white-08), 0 4px 24px rgba(0, 0, 0, 0.25);
 }
 
 .nav__inner {
@@ -618,6 +650,9 @@ button {
   position: relative;
   min-height: 100vh;
   background: var(--ink);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 60% 110%, rgba(201, 168, 76, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 0% 0%, rgba(255,255,255,0.02) 0%, transparent 50%);
   display: flex;
   align-items: center;
   padding-top: var(--nav-h);
@@ -1001,11 +1036,12 @@ button {
 .change-item {
   background: var(--ink);
   padding: var(--sp-40);
+  cursor: default;
   transition: background var(--dur) var(--ease);
 }
 
 .change-item:hover {
-  background: rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.05);
 }
 
 .change-item__number {
@@ -1555,7 +1591,9 @@ button {
 .value-item {
   background: var(--white);
   padding: var(--sp-40);
-  transition: background var(--dur) var(--ease);
+  cursor: default;
+  transition: background var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
 }
 
 .value-item:hover {
@@ -1833,7 +1871,104 @@ button {
 }
 
 
-/* ── 25. RESPONSIVE ──────────────────────────────────────── */
+/* ── 25. FOCUS STATES ────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.nav__link:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.5);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.form-input:focus-visible,
+.form-textarea:focus-visible {
+  outline: none;
+}
+
+
+/* ── 26. REDUCED MOTION ──────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero__label,
+  .hero__title-line span,
+  .hero__rule,
+  .hero__subtext,
+  .hero__cta,
+  .hero__scroll {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .hero__rule {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  .page-curtain {
+    animation: none;
+    transform: scaleY(0);
+  }
+}
+
+
+/* ── 27. GOLD ACCENTS ────────────────────────────────────── */
+
+/* Statement block — gold left border on dark bg */
+.wws-statement {
+  border-left: 3px solid var(--gold);
+}
+
+/* CTA banner — subtle gold gradient shimmer top */
+.cta-banner {
+  border-top: 1px solid var(--white-08);
+  background-image: radial-gradient(ellipse 60% 50% at 30% 100%, var(--gold-glow) 0%, transparent 70%);
+}
+
+/* Services nav active — gold underline */
+.services-nav__link.is-active {
+  color: var(--ink);
+  border-bottom-color: var(--gold);
+}
+
+/* Section label gold dot on dark */
+.section-label-light {
+  color: var(--white-40);
+}
+.section-label-light::before {
+  background: var(--gold);
+  opacity: 0.7;
+}
+
+/* Proof cta note — gold emphasis */
+.proof__cta-note p strong {
+  color: var(--ink);
+}
+
+
+/* ── 28. RESPONSIVE ──────────────────────────────────────── */
+
 
 @media (max-width: 1024px) {
   :root {

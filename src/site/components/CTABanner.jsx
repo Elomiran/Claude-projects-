@@ -13,7 +13,7 @@ export default function CTABanner({ heading, sub, tagline, eyebrow = 'Start here
           </Reveal>
           <Reveal direction="right">
             <div className="cta-banner__right">
-              <Link to="/contact" className="btn btn-light">
+              <Link to="/contact" className="btn btn-gold">
                 Start a conversation <span className="arrow">→</span>
               </Link>
               <p className="cta-banner__tagline">{tagline}</p>

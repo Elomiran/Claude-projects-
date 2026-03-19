@@ -66,7 +66,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease, delay: 1.15 }}
           >
-            <Link to="/contact" className="btn btn-light">
+            <Link to="/contact" className="btn btn-gold">
               Start here <span className="arrow">→</span>
             </Link>
           </motion.div>
