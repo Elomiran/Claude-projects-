@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main, master, "claude/website-builder-setup-JHEML"]
+    branches: [main, master, "claude/website-builder-setup-JHEML", "claude/transfer-knowledge-repos-3TK8a"]
 
 permissions:
   contents: read
