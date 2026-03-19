@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude Website Builder</title>
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="header-inner">
+        <h1 class="logo">Claude Website Builder</h1>
+        <nav class="nav">
+          <button class="btn btn-outline" id="previewBtn">Preview</button>
+          <button class="btn btn-primary" id="exportBtn">Export</button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <!-- Sidebar: Component Palette -->
+      <aside class="sidebar">
+        <h2 class="sidebar-title">Components</h2>
+        <div class="component-list" id="componentList">
+          <div class="component-item" draggable="true" data-type="heading">
+            <span class="component-icon">H</span>
+            <span>Heading</span>
+          </div>
+          <div class="component-item" draggable="true" data-type="paragraph">
+            <span class="component-icon">P</span>
+            <span>Paragraph</span>
+          </div>
+          <div class="component-item" draggable="true" data-type="image">
+            <span class="component-icon">IMG</span>
+            <span>Image</span>
+          </div>
+          <div class="component-item" draggable="true" data-type="button">
+            <span class="component-icon">BTN</span>
+            <span>Button</span>
+          </div>
+          <div class="component-item" draggable="true" data-type="section">
+            <span class="component-icon">[]</span>
+            <span>Section</span>
+          </div>
+          <div class="component-item" draggable="true" data-type="columns">
+            <span class="component-icon">|||</span>
+            <span>Columns</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Canvas: Drop Zone -->
+      <main class="canvas" id="canvas">
+        <div class="canvas-empty" id="canvasEmpty">
+          <p>Drag components here to build your page</p>
+        </div>
+      </main>
+
+      <!-- Properties Panel -->
+      <aside class="properties" id="propertiesPanel">
+        <h2 class="sidebar-title">Properties</h2>
+        <div class="properties-content" id="propertiesContent">
+          <p class="properties-empty">Select a component to edit its properties</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
