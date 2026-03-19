@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Start a conversation with Elòmiràn Consult. If there is an area of your work you keep mentally tracking because no one else is — that is usually the right place to start.">
+  <title>Start Here — Elòmiràn Consult</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    /* Contact-specific overrides */
+    .contact-hero {
+      background: var(--ink);
+      padding-top: calc(var(--nav-h) + var(--sp-80));
+      padding-bottom: var(--sp-96);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-hero__bg {
+      position: absolute;
+      right: -4%;
+      top: -10%;
+      width: min(45vw, 560px);
+      opacity: 0.04;
+      pointer-events: none;
+    }
+
+    .contact-hero__inner {
+      max-width: var(--max-w);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+    }
+
+    .contact-hero__eyebrow {
+      margin-bottom: var(--sp-24);
+    }
+
+    .contact-hero__title {
+      font-size: clamp(40px, 5.5vw, 72px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.06;
+      color: var(--white);
+      max-width: 780px;
+      margin-bottom: var(--sp-24);
+    }
+
+    .contact-hero__conditions {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-8);
+      margin-top: var(--sp-32);
+    }
+
+    .contact-hero__condition {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--sp-12);
+      font-size: clamp(15px, 1.3vw, 17px);
+      color: var(--white-65);
+      line-height: 1.55;
+    }
+
+    .contact-hero__condition::before {
+      content: '—';
+      color: var(--white-40);
+      flex-shrink: 0;
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .contact-note {
+      margin-top: var(--sp-40);
+      font-size: 14px;
+      color: var(--white-40);
+      font-style: italic;
+    }
+
+    /* Form section */
+    .contact-body {
+      background: var(--white);
+    }
+
+    .contact-body-inner {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: var(--sp-64) var(--sp-96);
+      align-items: start;
+    }
+
+    .contact-sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + var(--sp-32));
+    }
+
+    .contact-sidebar__heading {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      margin-bottom: var(--sp-16);
+    }
+
+    .contact-sidebar__body {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--grey-dark);
+      margin-bottom: var(--sp-32);
+    }
+
+    .contact-sidebar__rule {
+      height: 1px;
+      background: var(--grey-pale);
+      margin-block: var(--sp-32);
+    }
+
+    .contact-sidebar__detail {
+      font-size: 13.5px;
+      color: var(--grey-dark);
+      line-height: 1.6;
+      margin-bottom: var(--sp-12);
+      padding-left: var(--sp-16);
+      border-left: 2px solid var(--grey-pale);
+    }
+
+    .contact-sidebar__detail strong {
+      display: block;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    @media (max-width: 900px) {
+      .contact-body-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-sidebar {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVIGATION ───────────────────────────────────────── -->
+  <nav class="nav nav--solid" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo" aria-label="Elòmiràn Consult — home">
+        <svg class="nav__logo-mark" viewBox="0 0 88 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M0 0H88V80H48L38 96V80H0Z" fill="currentColor"/>
+          <rect x="10" y="10" width="68" height="60" stroke="white" stroke-width="5.5" fill="none"/>
+          <path d="M24 26H64V64H44" stroke="white" stroke-width="5.5" stroke-linecap="square" fill="none"/>
+          <line x1="24" y1="44" x2="44" y2="64" stroke="white" stroke-width="5.5" stroke-linecap="square"/>
+        </svg>
+        <div class="nav__logo-text">
+          <span class="nav__logo-name">El&ograve;mir&agrave;n</span>
+          <span class="nav__logo-sub">Consult</span>
+        </div>
+      </a>
+
+      <div class="nav__links" role="list">
+        <a href="index.html" class="nav__link" role="listitem">Home</a>
+        <a href="services.html" class="nav__link" role="listitem">Services</a>
+        <a href="how-we-work.html" class="nav__link" role="listitem">How We Work</a>
+        <a href="about.html" class="nav__link" role="listitem">About</a>
+        <a href="contact.html" class="nav__cta btn btn-ghost-light btn-nav" aria-current="page" role="listitem">Start Here</a>
+      </div>
+
+      <button class="nav__hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-overlay">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="nav__mobile-overlay" id="mobile-overlay" role="dialog" aria-label="Mobile navigation">
+      <a href="index.html" class="nav__link">Home</a>
+      <a href="services.html" class="nav__link">Services</a>
+      <a href="how-we-work.html" class="nav__link">How We Work</a>
+      <a href="about.html" class="nav__link">About</a>
+      <div class="nav__mobile-rule"></div>
+      <a href="contact.html" class="nav__mobile-cta btn btn-light" aria-current="page">Start Here <span class="arrow">→</span></a>
+    </div>
+  </nav>
+
+
+  <!-- ── CONTACT HERO ──────────────────────────────────────── -->
+  <section class="contact-hero" aria-label="Start here">
+    <svg class="contact-hero__bg" viewBox="0 0 88 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0 0H88V80H48L38 96V80H0Z" fill="white"/>
+      <rect x="10" y="10" width="68" height="60" stroke="#1C1B18" stroke-width="5.5" fill="none"/>
+      <path d="M24 26H64V64H44" stroke="#1C1B18" stroke-width="5.5" stroke-linecap="square" fill="none"/>
+      <line x1="24" y1="44" x2="44" y2="64" stroke="#1C1B18" stroke-width="5.5" stroke-linecap="square"/>
+    </svg>
+
+    <div class="contact-hero__inner">
+      <p class="contact-hero__eyebrow section-label section-label-light t-label">Start here</p>
+      <h1 class="contact-hero__title">
+        Start a conversation.
+      </h1>
+
+      <p style="color:var(--white-65); font-size:clamp(16px,1.4vw,19px); line-height:1.7; max-width:600px; margin-bottom:32px;">
+        If there is an area of your work that meets any of these conditions, that is usually the right place to begin.
+      </p>
+
+      <div class="contact-hero__conditions">
+        <p class="contact-hero__condition">You keep mentally tracking it because no one else is.</p>
+        <p class="contact-hero__condition">It feels risky to leave unattended.</p>
+        <p class="contact-hero__condition">It consumes more of your attention than it should.</p>
+      </div>
+
+      <p class="contact-note">
+        If it is not a fit, that will be clear early — and you will leave the conversation with more clarity than you arrived with.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ── CONTACT BODY ──────────────────────────────────────── -->
+  <section class="contact-body section-pad" id="form">
+    <div class="container">
+      <div class="contact-body-inner">
+
+        <!-- Sidebar -->
+        <div class="contact-sidebar" data-reveal="left">
+          <h2 class="contact-sidebar__heading">What to expect</h2>
+          <p class="contact-sidebar__body">
+            The purpose of an initial conversation is to determine whether the scope can be clearly defined, whether this is the right model for your situation, and whether we are suited to hold it.
+          </p>
+          <p class="contact-sidebar__body">
+            There is no commitment expected from a first conversation. If it is not the right fit, that will be established early — directly and without obligation.
+          </p>
+
+          <div class="contact-sidebar__rule"></div>
+
+          <div class="contact-sidebar__detail">
+            <strong>Response time</strong>
+            We aim to respond within two business days. If the scope you describe requires more than a brief note, the response will reflect that.
+          </div>
+
+          <div class="contact-sidebar__detail" style="margin-top:16px;">
+            <strong>What to include</strong>
+            A brief description of the area you would like held. You do not need to have the scope defined — part of the conversation is determining whether it can be.
+          </div>
+
+          <div class="contact-sidebar__detail" style="margin-top:16px;">
+            <strong>Format</strong>
+            Written conversations first. A call where useful, but not as a default.
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div data-reveal data-delay="2">
+          <form class="contact-form" id="contact-form" novalidate>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label" for="name">Name <span style="color:var(--grey-mid)">(required)</span></label>
+                <input
+                  class="form-input"
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Your name"
+                  autocomplete="name"
+                  required
+                >
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="organisation">Organisation</label>
+                <input
+                  class="form-input"
+                  type="text"
+                  id="organisation"
+                  name="organisation"
+                  placeholder="Company or organisation"
+                  autocomplete="organization"
+                >
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="email">Email address <span style="color:var(--grey-mid)">(required)</span></label>
+              <input
+                class="form-input"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+              >
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="area">
+                What area of your work needs to be held?
+                <span style="color:var(--grey-mid)">(required)</span>
+              </label>
+              <textarea
+                class="form-textarea"
+                id="area"
+                name="area"
+                placeholder="Describe the area — strategy direction, social media and content, website management, or something more specific. You do not need to have it fully defined."
+                rows="6"
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="context">Additional context</label>
+              <textarea
+                class="form-textarea"
+                id="context"
+                name="context"
+                placeholder="Any background that helps us understand your situation — the nature of your organisation, how the problem shows up, what you have already tried."
+                rows="4"
+              ></textarea>
+            </div>
+
+            <div class="form-submit">
+              <p class="form-note">
+                Your information is used only for the purpose of this conversation and is not shared with third parties.
+              </p>
+              <button type="submit" class="btn btn-dark">
+                Send message <span class="arrow">→</span>
+              </button>
+            </div>
+
+          </form>
+
+          <!-- Success state -->
+          <div class="form-success" id="form-success" role="alert">
+            <p>
+              <strong>Message received.</strong><br>
+              We will respond within two business days. If your situation requires more than a brief note, our response will reflect that.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── FOOTER ────────────────────────────────────────────── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__top">
+        <div>
+          <a href="index.html" class="footer__brand-name">El&ograve;mir&agrave;n</a>
+          <span class="footer__brand-sub">Consult</span>
+          <p class="footer__tagline">
+            Holding responsibility where your work depends on continuity across time.
+          </p>
+        </div>
+        <div>
+          <p class="footer__col-title">Pages</p>
+          <ul class="footer__nav-list">
+            <li><a href="index.html" class="footer__nav-link">Home</a></li>
+            <li><a href="services.html" class="footer__nav-link">Services</a></li>
+            <li><a href="how-we-work.html" class="footer__nav-link">How We Work</a></li>
+            <li><a href="about.html" class="footer__nav-link">About</a></li>
+            <li><a href="contact.html" class="footer__nav-link">Start Here</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer__col-title">Services</p>
+          <ul class="footer__nav-list">
+            <li><a href="services.html#strategy" class="footer__nav-link">Strategy</a></li>
+            <li><a href="services.html#creative" class="footer__nav-link">Creative</a></li>
+            <li><a href="services.html#systems" class="footer__nav-link">Systems / Execution</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2025 El&ograve;mir&agrave;n Consult. All rights reserved.</p>
+        <div class="footer__legal">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

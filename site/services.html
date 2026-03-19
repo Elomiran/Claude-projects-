@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Elòmiràn Consult services — Strategy, Creative, and Systems/Execution. Work across three areas where breakdowns happen repeatedly.">
+  <title>Services — Elòmiràn Consult</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+  <!-- ── NAVIGATION ───────────────────────────────────────── -->
+  <nav class="nav nav--solid" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo" aria-label="Elòmiràn Consult — home">
+        <svg class="nav__logo-mark" viewBox="0 0 88 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M0 0H88V80H48L38 96V80H0Z" fill="currentColor"/>
+          <rect x="10" y="10" width="68" height="60" stroke="white" stroke-width="5.5" fill="none"/>
+          <path d="M24 26H64V64H44" stroke="white" stroke-width="5.5" stroke-linecap="square" fill="none"/>
+          <line x1="24" y1="44" x2="44" y2="64" stroke="white" stroke-width="5.5" stroke-linecap="square"/>
+        </svg>
+        <div class="nav__logo-text">
+          <span class="nav__logo-name">El&ograve;mir&agrave;n</span>
+          <span class="nav__logo-sub">Consult</span>
+        </div>
+      </a>
+
+      <div class="nav__links" role="list">
+        <a href="index.html" class="nav__link" role="listitem">Home</a>
+        <a href="services.html" class="nav__link" aria-current="page" role="listitem">Services</a>
+        <a href="how-we-work.html" class="nav__link" role="listitem">How We Work</a>
+        <a href="about.html" class="nav__link" role="listitem">About</a>
+        <a href="contact.html" class="nav__cta btn btn-ghost-light btn-nav" role="listitem">Start Here</a>
+      </div>
+
+      <button class="nav__hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-overlay">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="nav__mobile-overlay" id="mobile-overlay" role="dialog" aria-label="Mobile navigation">
+      <a href="index.html" class="nav__link">Home</a>
+      <a href="services.html" class="nav__link" aria-current="page">Services</a>
+      <a href="how-we-work.html" class="nav__link">How We Work</a>
+      <a href="about.html" class="nav__link">About</a>
+      <div class="nav__mobile-rule"></div>
+      <a href="contact.html" class="nav__mobile-cta btn btn-light">Start Here <span class="arrow">→</span></a>
+    </div>
+  </nav>
+
+
+  <!-- ── PAGE HERO ─────────────────────────────────────────── -->
+  <section class="page-hero" aria-label="Services overview">
+    <svg class="page-hero__bg-mark" viewBox="0 0 88 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0 0H88V80H48L38 96V80H0Z" fill="white"/>
+      <rect x="10" y="10" width="68" height="60" stroke="#1C1B18" stroke-width="5.5" fill="none"/>
+      <path d="M24 26H64V64H44" stroke="#1C1B18" stroke-width="5.5" stroke-linecap="square" fill="none"/>
+      <line x1="24" y1="44" x2="44" y2="64" stroke="#1C1B18" stroke-width="5.5" stroke-linecap="square"/>
+    </svg>
+    <div class="page-hero__inner">
+      <p class="page-hero__label section-label section-label-light t-label">What we do</p>
+      <h1 class="page-hero__title t-h1">Services</h1>
+      <p class="page-hero__desc">
+        We work across three areas where breakdowns happen repeatedly. Each area includes execution, but the value comes from holding it together over time.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ── SERVICES SUB-NAV ──────────────────────────────────── -->
+  <div class="services-nav" role="navigation" aria-label="Services sections">
+    <div class="container services-nav__inner">
+      <a href="#strategy" class="services-nav__link">Strategy</a>
+      <a href="#creative" class="services-nav__link">Creative</a>
+      <a href="#systems" class="services-nav__link">Systems / Execution</a>
+    </div>
+  </div>
+
+
+  <!-- ── STRATEGY ──────────────────────────────────────────── -->
+  <section class="service-section section-pad" id="strategy">
+    <div class="container">
+      <div class="service-grid">
+
+        <div class="service-left" data-reveal="left">
+          <span class="service-tag">Strategy</span>
+          <h2 class="t-h2 service-title">Direction that holds long enough to matter</h2>
+          <p class="service-desc">
+            Strategy work exists because direction decays faster than execution.
+          </p>
+        </div>
+
+        <div class="service-right">
+          <p class="service-right__intro" data-reveal>
+            Ideas are approved, then quietly replaced. Messaging shifts. Funnels are rebuilt because upstream thinking was never stabilised. This is not a failure of effort — it is a failure of continuity.
+          </p>
+
+          <div class="service-includes" data-reveal data-delay="1">
+            <p class="service-includes__title">This work typically includes</p>
+            <ul class="service-includes__list">
+              <li>Ideation with constraints, not open-ended brainstorming</li>
+              <li>Positioning and messaging clarification</li>
+              <li>Funnel and content direction tied to business priorities</li>
+              <li>Decision filtering: what advances the system and what introduces noise</li>
+            </ul>
+          </div>
+
+          <div class="service-changes" data-reveal data-delay="2">
+            <p class="service-changes__title">What changes</p>
+            <ul class="service-changes__list">
+              <li>Fewer strategic resets</li>
+              <li>Direction persists long enough to measure</li>
+              <li>Teams execute with less second-guessing</li>
+            </ul>
+          </div>
+
+          <p class="service-note" data-reveal data-delay="3">
+            This work is ongoing by design. Direction that is visited once and then abandoned is not strategy — it is planning.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── CREATIVE ──────────────────────────────────────────── -->
+  <section class="service-section section-pad" id="creative">
+    <div class="container">
+      <div class="service-grid">
+
+        <div class="service-left" data-reveal="left">
+          <span class="service-tag">Creative</span>
+          <h2 class="t-h2 service-title">Social media and content that compounds instead of resets</h2>
+          <p class="service-desc">
+            Most content problems are not output problems. They are coherence problems.
+          </p>
+        </div>
+
+        <div class="service-right">
+          <p class="service-right__intro" data-reveal>
+            Posting continues, but tone shifts. Engagement fluctuates. Accounts feel busy but forgettable. The issue is not volume — it is the absence of a stable voice maintained over time.
+          </p>
+
+          <div class="service-includes" data-reveal data-delay="1">
+            <p class="service-includes__title">This work typically includes</p>
+            <ul class="service-includes__list">
+              <li>Social media management — planning, posting, and review</li>
+              <li>Content ideation aligned to strategy, not trends</li>
+              <li>Caption and message refinement to maintain a stable voice</li>
+              <li>Ongoing performance review across weeks, not individual posts</li>
+            </ul>
+          </div>
+
+          <div class="service-changes" data-reveal data-delay="2">
+            <p class="service-changes__title">What changes</p>
+            <ul class="service-changes__list">
+              <li>A recognisable voice over time</li>
+              <li>More stable engagement and click-through metrics</li>
+              <li>Less content churn and corrective feedback</li>
+            </ul>
+          </div>
+
+          <p class="service-note" data-reveal data-delay="3">
+            Volume is secondary. Continuity is the point.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── SYSTEMS / EXECUTION ───────────────────────────────── -->
+  <section class="service-section section-pad" id="systems">
+    <div class="container">
+      <div class="service-grid">
+
+        <div class="service-left" data-reveal="left">
+          <span class="service-tag">Systems / Execution</span>
+          <h2 class="t-h2 service-title">Websites and funnels that remain accurate, usable, and trusted</h2>
+          <p class="service-desc">
+            Websites rarely fail outright. They decay.
+          </p>
+        </div>
+
+        <div class="service-right">
+          <p class="service-right__intro" data-reveal>
+            Pages fall out of date. Offers change. Structure stops matching how the business actually operates. Funnels underperform because messaging upstream no longer aligns with what happens downstream. Redesigns reset the surface — they do not stop the decay.
+          </p>
+
+          <div class="service-includes" data-reveal data-delay="1">
+            <p class="service-includes__title">This work typically includes</p>
+            <ul class="service-includes__list">
+              <li>Website audits focused on accuracy, structure, and trust</li>
+              <li>Ongoing website management and updates</li>
+              <li>Content edits as services, pricing, or positioning change</li>
+              <li>Page additions and removals as the business evolves</li>
+              <li>Broken link checks, form testing, and basic technical hygiene</li>
+              <li>Funnel alignment across pages, content, and calls to action</li>
+              <li>Monitoring conversion and drop-off patterns</li>
+            </ul>
+          </div>
+
+          <div class="service-changes" data-reveal data-delay="2">
+            <p class="service-changes__title">What changes</p>
+            <ul class="service-changes__list">
+              <li>The website reflects reality, not history</li>
+              <li>Fewer silent credibility losses</li>
+              <li>Funnels behave more predictably</li>
+              <li>Conversion metrics improve through consistency</li>
+            </ul>
+          </div>
+
+          <p class="service-note" data-reveal data-delay="3">
+            This is maintenance work. It replaces emergency fixes.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── HOW THIS IS SCOPED ─────────────────────────────────── -->
+  <section class="section-pad bg-ink c-white" id="scope">
+    <div class="container">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap: 64px 96px; align-items:start;">
+        <div data-reveal="left">
+          <p class="section-label section-label-light t-label" style="margin-bottom:24px;">How this is scoped</p>
+          <h2 class="t-h2" style="color:var(--white); margin-bottom:24px;">Services are rarely isolated.</h2>
+          <p style="color:var(--white-65); font-size:clamp(16px,1.4vw,18px); line-height:1.7;">
+            Strategy stabilises direction. Creative preserves it in public. Systems ensure it converts and remains credible.
+          </p>
+          <p style="color:var(--white-65); font-size:clamp(16px,1.4vw,18px); line-height:1.7; margin-top:20px;">
+            We combine services where responsibility overlaps. We do not package work where it does not.
+          </p>
+        </div>
+        <div data-reveal="right">
+          <p class="section-label section-label-light t-label" style="margin-bottom:24px;">When this is not a fit</p>
+          <ul class="not-fit-list" style="--grey-pale: rgba(255,255,255,0.08);">
+            <li style="border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.65); padding: 16px 0; display:flex; gap:12px; align-items:flex-start;">
+              <span style="color:rgba(255,255,255,0.35); font-size:18px; font-weight:300; flex-shrink:0; margin-top:-1px;">×</span>
+              One-off tasks without ongoing accountability
+            </li>
+            <li style="border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.65); padding: 16px 0; display:flex; gap:12px; align-items:flex-start;">
+              <span style="color:rgba(255,255,255,0.35); font-size:18px; font-weight:300; flex-shrink:0; margin-top:-1px;">×</span>
+              Execution on demand, without responsibility
+            </li>
+            <li style="border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.65); padding: 16px 0; display:flex; gap:12px; align-items:flex-start;">
+              <span style="color:rgba(255,255,255,0.35); font-size:18px; font-weight:300; flex-shrink:0; margin-top:-1px;">×</span>
+              High-volume, trend-driven content
+            </li>
+            <li style="color: rgba(255,255,255,0.65); padding: 16px 0; display:flex; gap:12px; align-items:flex-start;">
+              <span style="color:rgba(255,255,255,0.35); font-size:18px; font-weight:300; flex-shrink:0; margin-top:-1px;">×</span>
+              Websites treated as static brochures
+            </li>
+          </ul>
+          <p style="margin-top:24px; font-size:14px; font-style:italic; color:rgba(255,255,255,0.4); border-top: 1px solid rgba(255,255,255,0.08); padding-top:20px;">
+            This work assumes steadiness is valuable.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── CTA BANNER ────────────────────────────────────────── -->
+  <section class="cta-banner" aria-label="Call to action">
+    <div class="container">
+      <div class="cta-banner__inner">
+        <div data-reveal="left">
+          <p class="section-label section-label-light t-label" style="margin-bottom:24px;">Start here</p>
+          <h2 class="cta-banner__heading">Stop carrying<br>this alone.</h2>
+          <p class="cta-banner__sub">
+            If it is unclear which service applies, that will become clear early in a conversation. The right scope is determined by the responsibility gap, not by a predefined package.
+          </p>
+        </div>
+        <div class="cta-banner__right" data-reveal="right">
+          <a href="contact.html" class="btn btn-light">
+            Start a conversation <span class="arrow">→</span>
+          </a>
+          <p class="cta-banner__tagline">
+            A short conversation to determine whether this responsibility should be held, and whether we are the right party to hold it.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── FOOTER ────────────────────────────────────────────── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__top">
+        <div>
+          <a href="index.html" class="footer__brand-name">El&ograve;mir&agrave;n</a>
+          <span class="footer__brand-sub">Consult</span>
+          <p class="footer__tagline">
+            Holding responsibility where your work depends on continuity across time.
+          </p>
+        </div>
+        <div>
+          <p class="footer__col-title">Pages</p>
+          <ul class="footer__nav-list">
+            <li><a href="index.html" class="footer__nav-link">Home</a></li>
+            <li><a href="services.html" class="footer__nav-link">Services</a></li>
+            <li><a href="how-we-work.html" class="footer__nav-link">How We Work</a></li>
+            <li><a href="about.html" class="footer__nav-link">About</a></li>
+            <li><a href="contact.html" class="footer__nav-link">Start Here</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer__col-title">Services</p>
+          <ul class="footer__nav-list">
+            <li><a href="services.html#strategy" class="footer__nav-link">Strategy</a></li>
+            <li><a href="services.html#creative" class="footer__nav-link">Creative</a></li>
+            <li><a href="services.html#systems" class="footer__nav-link">Systems / Execution</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2025 El&ograve;mir&agrave;n Consult. All rights reserved.</p>
+        <div class="footer__legal">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
