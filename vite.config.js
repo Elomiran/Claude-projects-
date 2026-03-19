@@ -7,14 +7,8 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: {
-        // React builder app
-        main: 'index.html',
-        // Elòmiràn Consult static pages
-        site: 'site/index.html',
-        about: 'site/about.html',
-        contact: 'site/contact.html',
-        services: 'site/services.html',
-        'how-we-work': 'site/how-we-work.html',
+        main: 'index.html',       // React drag-and-drop builder
+        site: 'site/index.html',  // Elòmiràn Consult React SPA
       },
     },
   },
