@@ -1,0 +1,31 @@
+/* React-specific overrides — Framer Motion handles what CSS used to */
+
+/* Let Framer Motion own the mobile overlay; don't fight it with CSS */
+.nav__mobile-overlay {
+  pointer-events: all;
+  position: fixed;
+  inset: 0;
+  top: var(--nav-h);
+  background: var(--ink);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--sp-48) var(--gutter);
+}
+
+/* Remove CSS scroll-reveal since Framer Motion replaces it */
+[data-reveal] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* Page transition wrapper fills layout normally */
+.page-transition {
+  width: 100%;
+}
+
+/* Smooth scroll for anchor targets */
+html { scroll-behavior: smooth; }
