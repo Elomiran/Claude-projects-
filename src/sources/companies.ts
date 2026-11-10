@@ -94,6 +94,68 @@ export const SEED_BOARDS: Board[] = [
   { ats: "ashby", slug: "lightspeedhq", company: "Lightspeed" },
 ];
 
+/**
+ * Boards polled for a search that is not for software, where the GitHub lists have nothing. Every
+ * slug answered with a live board when it was added. Mostly companies that hire brand, marketing,
+ * content and creative people and are open to remote work. A profile adds its own in `search.boards`.
+ */
+export const BUSINESS_SEED_BOARDS: Board[] = [
+  { ats: "greenhouse", slug: "coursera", company: "Coursera" },
+  { ats: "greenhouse", slug: "squarespace", company: "Squarespace" },
+  { ats: "greenhouse", slug: "airtable", company: "Airtable" },
+  { ats: "greenhouse", slug: "duolingo", company: "Duolingo" },
+  { ats: "greenhouse", slug: "asana", company: "Asana" },
+  { ats: "greenhouse", slug: "dropbox", company: "Dropbox" },
+  { ats: "greenhouse", slug: "pinterest", company: "Pinterest" },
+  { ats: "greenhouse", slug: "reddit", company: "Reddit" },
+  { ats: "greenhouse", slug: "twilio", company: "Twilio" },
+  { ats: "greenhouse", slug: "gitlab", company: "GitLab" },
+  { ats: "greenhouse", slug: "figma", company: "Figma" },
+  { ats: "greenhouse", slug: "hootsuite", company: "Hootsuite" },
+  { ats: "greenhouse", slug: "later", company: "Later" },
+  { ats: "greenhouse", slug: "mixpanel", company: "Mixpanel" },
+  { ats: "greenhouse", slug: "braze", company: "Braze" },
+  { ats: "greenhouse", slug: "sproutsocial", company: "Sprout Social" },
+  { ats: "greenhouse", slug: "klaviyo", company: "Klaviyo" },
+  { ats: "greenhouse", slug: "intercom", company: "Intercom" },
+  { ats: "greenhouse", slug: "calendly", company: "Calendly" },
+  { ats: "greenhouse", slug: "typeform", company: "Typeform" },
+  { ats: "greenhouse", slug: "contentful", company: "Contentful" },
+  { ats: "greenhouse", slug: "gusto", company: "Gusto" },
+  { ats: "greenhouse", slug: "remote", company: "Remote" },
+  { ats: "greenhouse", slug: "medium", company: "Medium" },
+  { ats: "greenhouse", slug: "kickstarter", company: "Kickstarter" },
+  { ats: "greenhouse", slug: "ziprecruiter", company: "ZipRecruiter" },
+  { ats: "greenhouse", slug: "peloton", company: "Peloton" },
+  { ats: "greenhouse", slug: "toast", company: "Toast" },
+  { ats: "greenhouse", slug: "okta", company: "Okta" },
+  { ats: "greenhouse", slug: "smartsheet", company: "Smartsheet" },
+  { ats: "greenhouse", slug: "carta", company: "Carta" },
+  { ats: "greenhouse", slug: "betterment", company: "Betterment" },
+  { ats: "greenhouse", slug: "robinhood", company: "Robinhood" },
+  { ats: "greenhouse", slug: "sofi", company: "SoFi" },
+  { ats: "greenhouse", slug: "faire", company: "Faire" },
+  { ats: "greenhouse", slug: "affirm", company: "Affirm" },
+  { ats: "greenhouse", slug: "coinbase", company: "Coinbase" },
+  { ats: "greenhouse", slug: "wealthsimple", company: "Wealthsimple" },
+  { ats: "lever", slug: "spotify", company: "Spotify" },
+  { ats: "lever", slug: "binance", company: "Binance" },
+  { ats: "ashby", slug: "notion", company: "Notion" },
+  { ats: "ashby", slug: "ramp", company: "Ramp" },
+  { ats: "ashby", slug: "linear", company: "Linear" },
+  { ats: "ashby", slug: "klue", company: "Klue" },
+  { ats: "ashby", slug: "jobber", company: "Jobber" },
+  { ats: "ashby", slug: "posthog", company: "PostHog" },
+  { ats: "ashby", slug: "hightouch", company: "Hightouch" },
+  { ats: "ashby", slug: "writer", company: "Writer" },
+  { ats: "ashby", slug: "synthesia", company: "Synthesia" },
+  { ats: "ashby", slug: "runway", company: "Runway" },
+  { ats: "ashby", slug: "photoroom", company: "Photoroom" },
+  { ats: "ashby", slug: "webflow", company: "Webflow" },
+  { ats: "ashby", slug: "lemlist", company: "lemlist" },
+  { ats: "ashby", slug: "gamma", company: "Gamma" },
+];
+
 /** Every board the given jobs point at, merged with the seed list, deduped by ats+slug. */
 export function boardsFromJobs(jobs: Job[], seeds: Board[] = SEED_BOARDS): Board[] {
   const map = new Map<string, Board>();

@@ -170,6 +170,18 @@ export const LOCATION_MULTIPLIER = {
   unclear: 0.7,
 } as const;
 
+/**
+ * Experience levels, worded as definitions for the fit question when a profile has a `search`.
+ * The years are what a posting asks for, not what the candidate has.
+ */
+export const LEVEL_CRITERIA = {
+  entry: "Intern, trainee, graduate, junior, or an associate role asking for 0 to 2 years",
+  mid: "Specialist, manager or senior executive asking for about 3 to 6 years",
+  senior: "Senior manager, senior strategist, associate director or lead asking for about 6 to 10 years",
+  lead: "Director, head of, VP, chief or any role asking for 10 or more years or running a department",
+  other: "Unclear or not a job posting",
+} as const;
+
 /** Applied when the posting asks for a graduation date the candidate does not have. They can still apply, so it ranks lower instead of being dropped. */
 export const GRADUATION_MISMATCH_MULTIPLIER = 0.6;
 

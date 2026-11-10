@@ -3,11 +3,11 @@
  * might need (speculative fan-out). Code turns the typed answers into a
  * composite score, hard skips, and human-readable reasons.
  */
-import { FIT_WEIGHTS, GRADUATION_MISMATCH_MULTIPLIER, LOCATION_MULTIPLIER, RECENCY_FLOOR, DISCOVER } from "../config.js";
+import { FIT_WEIGHTS, GRADUATION_MISMATCH_MULTIPLIER, LEVEL_CRITERIA, LOCATION_MULTIPLIER, RECENCY_FLOOR, DISCOVER } from "../config.js";
 import type { JevClient } from "../jev/client.js";
 import { choice, noul, score, scoreToUnit } from "../jev/questions.js";
 import type { Answer, ChoiceAnswer, NoulAnswer, Questions, ScoreAnswer } from "../jev/types.js";
-import { monthName, sponsorshipLater, usStatus, type Profile } from "../profile/schema.js";
+import { monthName, sponsorshipLater, usStatus, type Profile, type Search } from "../profile/schema.js";
 import { locationTier, type LocationTier } from "./hardFilters.js";
 import { ageDays, type Job } from "./normalize.js";
 import { hashOf, type KeyedCache } from "../util/cache.js";
@@ -27,7 +27,8 @@ function termCriteria(gradMonth: number, gradYear: number): Record<string, strin
 }
 
 /** Every question for one posting, with the term and graduation wording taken from the profile. */
-export function fitQuestions(profile: Pick<Profile, "education">): Questions {
+export function fitQuestions(profile: Pick<Profile, "education" | "search">): Questions {
+  if (profile.search) return searchQuestions(profile.search);
   const edu = profile.education[0];
   const month = edu?.gradMonth ?? 4;
   const year = edu?.gradYear ?? new Date().getUTCFullYear() + 1;
@@ -38,6 +39,27 @@ export function fitQuestions(profile: Pick<Profile, "education">): Questions {
       true: `It names a graduation window, class year or "returning to school after" rule that excludes ${monthName(month)} ${year}`,
       false: `No graduation requirement is stated, or ${monthName(month)} ${year} fits it`,
     }),
+  };
+}
+
+/**
+ * The questions for a search that is not for early-career software. The term, graduation and
+ * returning-student questions do not apply, and the three that did are reworded around the
+ * candidate's own focus. The keys stay the same so the scoring reads one shape.
+ */
+function searchQuestions(search: Search): Questions {
+  const {
+    term: _term, graduation_excluded: _grad, returning_student_required: _ret, is_software_role: _sw, level: _level, stack_match: _stack,
+    ...rest
+  } = FIT_QUESTIONS;
+  return {
+    ...rest,
+    is_software_role: noul(`Is this a role in the kind of work the candidate is looking for: ${search.focus}?`, {
+      true: "The day-to-day work of the role is that kind of work",
+      false: "The role is mainly something else, such as engineering, sales quota carrying, finance, or an unrelated field",
+    }),
+    level: choice("What level is this posting, judged by its title and the experience it asks for?", { ...LEVEL_CRITERIA }),
+    stack_match: score("How well do the candidate's skills, tools and track record match what the posting asks for?", LEVELS5),
   };
 }
 
@@ -83,6 +105,13 @@ export const FIT_QUESTIONS: Questions = {
   requires_references: noul("Does the posting say references are required with the application?"),
 };
 
+type Level = Search["levels"][number];
+
+/** True when the posting's level is a known one the search does not want, and JEV is sure enough to skip on it. */
+function levelOutside(level: ChoiceAnswer, wanted: Level[]): boolean {
+  return level.choice !== "other" && !wanted.includes(level.choice as Level) && level.confidence >= 0.6;
+}
+
 export type FitResult = {
   score: number;
   decision: "apply" | "below_threshold" | "skip";
@@ -115,6 +144,8 @@ export function buildFitState(job: Job, profile: Profile, now = new Date()): Rec
       // Only when the profile lists any, so the ratings cached for every other profile stay valid.
       ...(sponsorshipLater(profile).length ? { authorized_now_but_needs_sponsorship_later_in: sponsorshipLater(profile) } : {}),
       preferred_locations: profile.preferences.preferredLocations,
+      // Only when the profile has a search, so the ratings cached for every other profile stay valid.
+      ...(profile.search ? { looking_for: profile.search.focus } : {}),
     },
   };
 }
@@ -138,13 +169,21 @@ export async function rateJob(jev: JevClient, job: Job, profile: Profile, now = 
     answers = await jev.decide(buildFitState(job, profile, now), fitQuestions(profile), `rate:${job.company}:${job.title}`);
     cache?.set(key, answers);
   }
-  return scoreFromAnswers(job, answers, now, usStatus(profile));
+  return scoreFromAnswers(job, answers, now, usStatus(profile), profile.search);
 }
 
-export function scoreFromAnswers(job: Job, answers: Record<string, Answer>, now = new Date(), us: { authorized: boolean; citizen: boolean } = { authorized: false, citizen: false }): FitResult {
+export function scoreFromAnswers(
+  job: Job,
+  answers: Record<string, Answer>,
+  now = new Date(),
+  us: { authorized: boolean; citizen: boolean } = { authorized: false, citizen: false },
+  /** The profile's search, when it is not for early-career software. */
+  search?: Pick<Search, "levels" | "locationWeights">,
+): FitResult {
   // A rating saved before a question existed simply lacks it; that reads as "no".
   const n = (k: string) => (answers[k] as NoulAnswer | undefined)?.noul ?? 0;
-  const c = (k: string) => answers[k] as ChoiceAnswer;
+  // The questions a search leaves out are absent from the answers; they read as an unclear choice.
+  const c = (k: string) => (answers[k] ?? { choice: "other", confidence: 0 }) as ChoiceAnswer;
   const s = (k: string) => answers[k] as ScoreAnswer;
   const reasons: string[] = [];
 
@@ -152,8 +191,9 @@ export function scoreFromAnswers(job: Job, answers: Record<string, Answer>, now 
   const tier: LocationTier = codeTier !== "unclear" ? codeTier : (c("location_tier").choice as LocationTier);
 
   let skipReason: string | null = null;
-  if (n("is_software_role") < 0.5) skipReason = "not a software role";
-  else if (c("level").choice === "experienced" && c("level").confidence >= 0.6) skipReason = "requires professional experience";
+  if (n("is_software_role") < 0.5) skipReason = search ? "not the kind of role searched for" : "not a software role";
+  else if (!search && c("level").choice === "experienced" && c("level").confidence >= 0.6) skipReason = "requires professional experience";
+  else if (search && levelOutside(c("level"), search.levels)) skipReason = `level is ${c("level").choice}, not one searched for`;
   else if (n("is_unpaid") > 0.7) skipReason = "unpaid";
   else if (n("needs_advanced_degree") > 0.7) skipReason = "advanced degree required";
   else if (c("work_auth").choice === "us_no_sponsorship" && c("work_auth").confidence >= 0.5 && !us.authorized) skipReason = "US role, no sponsorship";
@@ -161,8 +201,11 @@ export function scoreFromAnswers(job: Job, answers: Record<string, Answer>, now 
   else if (job.ats === "other" && n("needs_account") > 0.9) skipReason = "needs an account to apply";
   else if (n("requires_references") > 0.85) skipReason = "references required";
 
-  const levelFit = { internship: 1, new_grad: 1, experienced: 0.1, other: 0.3 }[c("level").choice] ?? 0.3;
-  const termFit = { summer: 1, new_grad: 1, winter: 0.8, earlier: 0.3, other: 0.5 }[c("term").choice] ?? 0.5;
+  const levelFit = search
+    ? search.levels.includes(c("level").choice as Level) ? 1 : c("level").choice === "other" ? 0.5 : 0.1
+    : ({ internship: 1, new_grad: 1, experienced: 0.1, other: 0.3 }[c("level").choice] ?? 0.3);
+  // A search has no term to match, so it neither helps nor hurts.
+  const termFit = search ? 1 : ({ summer: 1, new_grad: 1, winter: 0.8, earlier: 0.3, other: 0.5 }[c("term").choice] ?? 0.5);
   const components = {
     stackMatch: scoreToUnit(s("stack_match").score, LEVELS5.length),
     experienceMatch: scoreToUnit(s("experience_match").score, LEVELS5.length),
@@ -177,12 +220,13 @@ export function scoreFromAnswers(job: Job, answers: Record<string, Answer>, now 
   const recency = age === null ? 0.85 : 1 - (1 - RECENCY_FLOOR) * Math.min(1, age / DISCOVER.maxAgeDays);
   // The candidate may still apply, so a graduation window that excludes them lowers the rank instead of dropping the job.
   const gradExcluded = n("graduation_excluded") > 0.7;
-  const scoreValue = Math.round(base * LOCATION_MULTIPLIER[tier] * recency * (gradExcluded ? GRADUATION_MISMATCH_MULTIPLIER : 1) * 1000) / 1000;
+  const locationWeight = search?.locationWeights[tier] ?? LOCATION_MULTIPLIER[tier];
+  const scoreValue = Math.round(base * locationWeight * recency * (gradExcluded ? GRADUATION_MISMATCH_MULTIPLIER : 1) * 1000) / 1000;
 
   if (c("work_auth").choice === "us_sponsors" && !us.authorized) reasons.push("US role, sponsorship offered");
   if (c("work_auth").choice === "unclear" && tier === "us" && !us.authorized) reasons.push("US role, sponsorship not stated");
   if (gradExcluded) reasons.push("asks for a different graduation date");
-  if (n("returning_student_required") > 0.6) reasons.push("may require returning to school after the term");
+  if (!search && n("returning_student_required") > 0.6) reasons.push("may require returning to school after the term");
   if (n("interview_practical") > 0.6) reasons.push("practical interview process");
   reasons.push(`stack ${LEVELS5[Math.round(s("stack_match").score)] ?? ""}`.toLowerCase());
   reasons.push(`callback ${s("callback_likelihood").legend[String(Math.round(s("callback_likelihood").score))] ?? ""}`.toLowerCase());

@@ -21,13 +21,13 @@ const NOT_RERATED: readonly QueueStatus[] = KEPT_ON_REDISCOVERY.filter((s) => s 
 const CARRIED_OVER: readonly QueueStatus[] = KEPT_ON_REDISCOVERY.filter((s) => s !== "skipped" && s !== "failed");
 import { rateJob, type FitResult } from "./jobs/rate.js";
 import { loadRows, saveRows, upsertEntry } from "./log/csv.js";
-import { usStatus, type Profile } from "./profile/schema.js";
+import { titleWanted, usStatus, type Profile, type Search } from "./profile/schema.js";
 import type { Answer } from "./jev/types.js";
 import { KeyedCache } from "./util/cache.js";
 import { fetchAshbyBoard } from "./sources/ats/ashby.js";
 import { fetchGreenhouseBoard } from "./sources/ats/greenhouse.js";
 import { fetchLeverBoard } from "./sources/ats/lever.js";
-import { boardsFromJobs, type Board } from "./sources/companies.js";
+import { boardsFromJobs, BUSINESS_SEED_BOARDS, SEED_BOARDS, type Board } from "./sources/companies.js";
 import { fetchReadmeSources } from "./sources/githubReadme.js";
 import { fetchSimplify } from "./sources/simplify.js";
 import { importSheet } from "./sources/sheetImport.js";
@@ -47,6 +47,8 @@ export type DiscoverOptions = {
   now?: Date;
   /** The candidate's graduation year: a board title that names it is early-career. */
   gradYear?: number;
+  /** The profile's search, when it is not for early-career software: which titles count, which boards to poll, and whether the software lists are read at all. */
+  search?: Search;
   /** Consider postings up to this many days old, for one search. The default is DISCOVER.maxAgeDays. */
   maxAgeDays?: number;
 };
@@ -69,15 +71,18 @@ export async function collectJobs(opts: DiscoverOptions = {}): Promise<Job[]> {
   const log = opts.log ?? (() => {});
   const jobs: Job[] = [];
 
-  const [simplify, readmes] = await Promise.all([
-    fetchSimplify().catch((e) => {
-      log(`[sources] simplify failed: ${String(e)}`);
-      return [] as Job[];
-    }),
-    fetchReadmeSources(),
-  ]);
-  log(`[sources] simplify ${simplify.length}, github lists ${readmes.length}`);
-  jobs.push(...simplify, ...readmes);
+  // The GitHub lists are of software internships and new-grad roles; a search for anything else skips them.
+  if (!opts.search || opts.search.useSoftwareLists) {
+    const [simplify, readmes] = await Promise.all([
+      fetchSimplify().catch((e) => {
+        log(`[sources] simplify failed: ${String(e)}`);
+        return [] as Job[];
+      }),
+      fetchReadmeSources(),
+    ]);
+    log(`[sources] simplify ${simplify.length}, github lists ${readmes.length}`);
+    jobs.push(...simplify, ...readmes);
+  }
 
   if (existsSync(PATHS.imports)) {
     for (const f of readdirSync(PATHS.imports).filter((f) => f.endsWith(".csv"))) {
@@ -92,7 +97,8 @@ export async function collectJobs(opts: DiscoverOptions = {}): Promise<Job[]> {
   }
 
   if (opts.boards !== false) {
-    const boards = boardsFromJobs(jobs);
+    const seeds = opts.search ? [...BUSINESS_SEED_BOARDS, ...(opts.search.useSoftwareLists ? SEED_BOARDS : []), ...opts.search.boards] : SEED_BOARDS;
+    const boards = boardsFromJobs(jobs, seeds);
     log(`[sources] polling ${boards.length} company boards`);
     const results = await mapLimit(boards, DISCOVER.fetchConcurrency, (b: Board) =>
       b.ats === "greenhouse" ? fetchGreenhouseBoard(b.slug, b.company)
@@ -102,11 +108,11 @@ export async function collectJobs(opts: DiscoverOptions = {}): Promise<Job[]> {
     let fromBoards = 0;
     results.forEach((r) => {
       if (!r.ok) return;
-      const early = r.value.filter((j) => isEarlyCareerTitle(j.title, opts.gradYear));
-      fromBoards += early.length;
-      jobs.push(...early);
+      const wanted = r.value.filter((j) => (opts.search ? titleWanted(j.title, opts.search) : isEarlyCareerTitle(j.title, opts.gradYear)));
+      fromBoards += wanted.length;
+      jobs.push(...wanted);
     });
-    log(`[sources] boards contributed ${fromBoards} early-career postings`);
+    log(`[sources] boards contributed ${fromBoards} ${opts.search ? "matching" : "early-career"} postings`);
   }
   return dedupe(jobs);
 }
@@ -173,7 +179,8 @@ export async function discover(profile: Profile, jev: JevClient, opts: DiscoverO
   const prevById = new Map(previous.entries.map((e) => [e.job.id, e]));
 
   const gradYear = profile.education[0]?.gradYear;
-  const all = await collectJobs({ ...opts, ...(gradYear !== undefined ? { gradYear } : {}) });
+  const search = opts.search ?? profile.search;
+  const all = await collectJobs({ ...opts, ...(gradYear !== undefined ? { gradYear } : {}), ...(search ? { search } : {}) });
   const learned = learnedWalledHosts();
   const us = usStatus(profile);
   const collected = all.length;
@@ -186,7 +193,7 @@ export async function discover(profile: Profile, jev: JevClient, opts: DiscoverO
   // An account board counts when the person has an account there or allowed one, even if today's limit of new accounts is used up.
   const withAccount = (url: string) => (capabilityFor(url)?.verdict ?? "no") !== "no";
   for (const job of all) {
-    const reason = preFilter(job, now, (url) => isWalled(url, learned), us, opts.maxAgeDays, withAccount);
+    const reason = preFilter(job, now, (url) => isWalled(url, learned), us, opts.maxAgeDays, withAccount, search);
     if (reason) decided.push({ job, fit: null, reason });
     else kept.push(job);
   }

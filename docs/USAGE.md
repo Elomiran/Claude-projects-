@@ -270,6 +270,32 @@ looked at, including the ones it skipped, with the reason. Its first 15
 columns match a common job-tracking sheet, so you can paste it into one.
 To print it, run `npx jev log --all`.
 
+## Searching for something other than early-career software
+
+The tool starts out looking for software internships and new-grad roles. For any other
+search (brand, marketing, design, operations, and so on, at any level), add a `search` block
+to `data/profile.json`:
+
+```json
+"search": {
+  "focus": "one or two sentences naming the work you want",
+  "titleInclude": ["brand", "marketing manager", "creative director"],
+  "titleExclude": ["intern", "software", "sales"],
+  "levels": ["mid", "senior"],
+  "boards": [{ "ats": "greenhouse", "slug": "example", "company": "Example" }],
+  "locationWeights": { "international": 0.9 }
+}
+```
+
+With it, `discover` skips the software lists and reads company boards only: a shipped list
+of boards that hire for business roles (`BUSINESS_SEED_BOARDS`) plus yours. A posting is kept
+when its title matches `titleInclude` and nothing in `titleExclude` (regular expressions,
+case-insensitive). Fit is rated against `focus`, not against software, and the term and
+graduation questions are dropped. `levels` lists the levels to apply to (`entry`, `mid`,
+`senior`, `lead`; the years each means are in `LEVEL_CRITERIA` in `src/config.ts`): a posting
+JEV is sure sits at another level is skipped. `locationWeights` replaces the score
+multiplier for a location tier. Without the block nothing changes.
+
 ## How well it works
 
 We rehearsed every form in the queue on the three job boards the tool

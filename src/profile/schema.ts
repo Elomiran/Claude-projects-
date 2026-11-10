@@ -12,6 +12,32 @@ const YesNo = z.enum(["yes", "no"]);
 /** A voluntary self-identification question may be declined. */
 const YesNoDecline = z.enum(["yes", "no", "decline"]);
 
+/**
+ * What the candidate is searching for when it is not an early-career software role. Leave it out
+ * and every behaviour stays as it was: software internships and new-grad roles, from the lists
+ * and the boards. With it, discovery reads company boards only, keeps the postings whose title
+ * matches `titleInclude`, rates fit against `focus`, and treats `levels` as the experience levels
+ * the candidate will apply to.
+ */
+export const SearchSchema = z.object({
+  /** One or two sentences naming the work wanted, in the candidate's own terms. Used as the definition of a fit. */
+  focus: z.string().min(10),
+  /** Regular-expression sources matched, case-insensitively, against a posting title. A title must match one. */
+  titleInclude: z.array(z.string().min(1)).min(1),
+  /** A title that matches one of these is dropped, even if it also matches `titleInclude`. */
+  titleExclude: z.array(z.string().min(1)).default([]),
+  /** The experience levels to apply to. A posting at another level is skipped. */
+  levels: z.array(z.enum(["entry", "mid", "senior", "lead"])).min(1),
+  /** Company boards to poll, in addition to the ones the tool ships for this kind of search. */
+  boards: z.array(z.object({ ats: z.enum(["greenhouse", "lever", "ashby"]), slug: z.string().min(1), company: z.string().min(1) })).default([]),
+  /** Also read the software internship and new-grad lists. Off by default for a search that is not for software. */
+  useSoftwareLists: z.boolean().default(false),
+  /** Replaces the multiplier for a location tier, e.g. { "international": 0.9 } for someone who wants remote work from abroad. */
+  locationWeights: z.record(z.enum(["vancouver", "canada", "remote", "us", "international", "unclear"]), z.number().min(0).max(1)).default({}),
+});
+
+export type Search = z.infer<typeof SearchSchema>;
+
 export const ProfileSchema = z.object({
   name: z.object({
     first: z.string().min(1),
@@ -153,6 +179,8 @@ export const ProfileSchema = z.object({
    * JEV reads them when it picks an option; Claude reads them when it drafts.
    */
   answers: z.array(z.object({ question: z.string(), answer: z.string() })).default([]),
+  /** What to search for, when it is not an early-career software role. */
+  search: SearchSchema.optional(),
 });
 
 export type Profile = z.infer<typeof ProfileSchema>;
@@ -184,6 +212,12 @@ export function usStatus(profile: Pick<Profile, "workAuthorization">): { authori
   const isUs = (c: string) => /^(united states( of america)?|u\.?s\.?a?\.?)$/i.test(c.trim());
   const later = sponsorshipLater(profile).some(isUs);
   return { authorized: !later && profile.workAuthorization.authorizedCountries.some(isUs), citizen: profile.workAuthorization.citizenships.some(isUs) };
+}
+
+/** True when the title is one the search wants: it matches an include pattern and no exclude pattern. */
+export function titleWanted(title: string, search: Pick<Search, "titleInclude" | "titleExclude">): boolean {
+  const any = (patterns: string[]) => patterns.some((p) => new RegExp(p, "i").test(title));
+  return any(search.titleInclude) && !any(search.titleExclude);
 }
 
 export const MONTHS = [
