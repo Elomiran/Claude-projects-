@@ -64,7 +64,7 @@ export const ProfileSchema = z.object({
   }),
   links: z.object({
     linkedin: z.string().url(),
-    github: z.string().url(),
+    github: z.string().url().optional(),
     website: z.string().url().optional(),
     portfolio: z.string().url().optional(),
   }),
