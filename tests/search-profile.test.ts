@@ -67,3 +67,20 @@ describe("a search that is not for software", () => {
     expect(weighed).toBeGreaterThan(base);
   });
 });
+
+describe("a search limited to the candidate's region", () => {
+  const region = SearchSchema.parse({ focus: "brand and marketing work", titleInclude: ["brand"], levels: ["mid"], locationInclude: ["worldwide", "africa", "\\bremote\\b(?!\\s*[-,(]?\\s*(us|usa|canada))"] });
+  it("keeps open and regional locations and drops closed ones", async () => {
+    const { locationWanted } = await import("../src/profile/schema.js");
+    expect(locationWanted(["Remote - Worldwide"], region)).toBe(true);
+    expect(locationWanted(["Lagos, Africa"], region)).toBe(true);
+    expect(locationWanted(["Remote"], region)).toBe(true);
+    expect(locationWanted(["Remote - US"], region)).toBe(false);
+    expect(locationWanted(["Austin, TX"], region)).toBe(false);
+    expect(locationWanted(["Austin, TX"], SearchSchema.parse({ focus: "brand and marketing work", titleInclude: ["brand"], levels: ["mid"] }))).toBe(true);
+  });
+  it("is applied by preFilter", () => {
+    expect(preFilter(job({ locations: ["Austin, TX"] }), now, () => false, undefined, undefined, undefined, region)).toMatch(/region/);
+    expect(preFilter(job({ locations: ["Remote - Worldwide"] }), now, () => false, undefined, undefined, undefined, region)).toBeNull();
+  });
+});

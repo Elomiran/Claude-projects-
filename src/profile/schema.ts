@@ -32,6 +32,12 @@ export const SearchSchema = z.object({
   boards: z.array(z.object({ ats: z.enum(["greenhouse", "lever", "ashby"]), slug: z.string().min(1), company: z.string().min(1) })).default([]),
   /** Also read the software internship and new-grad lists. Off by default for a search that is not for software. */
   useSoftwareLists: z.boolean().default(false),
+  /**
+   * When set, a posting must name a location matching one of these patterns (regular expressions,
+   * case-insensitive), for someone who can only take roles open to their region ("worldwide", "africa").
+   * A posting that lists only a city elsewhere, or "Remote" with a country that is not theirs, is dropped.
+   */
+  locationInclude: z.array(z.string().min(1)).default([]),
   /** Replaces the multiplier for a location tier, e.g. { "international": 0.9 } for someone who wants remote work from abroad. */
   locationWeights: z.record(z.enum(["vancouver", "canada", "remote", "us", "international", "unclear"]), z.number().min(0).max(1)).default({}),
 });
@@ -212,6 +218,13 @@ export function usStatus(profile: Pick<Profile, "workAuthorization">): { authori
   const isUs = (c: string) => /^(united states( of america)?|u\.?s\.?a?\.?)$/i.test(c.trim());
   const later = sponsorshipLater(profile).some(isUs);
   return { authorized: !later && profile.workAuthorization.authorizedCountries.some(isUs), citizen: profile.workAuthorization.citizenships.some(isUs) };
+}
+
+/** True when the search has no location rule, or one of the posting's locations matches it. */
+export function locationWanted(locations: string[], search: Pick<Search, "locationInclude">): boolean {
+  if (!search.locationInclude.length) return true;
+  const all = locations.join(" | ");
+  return search.locationInclude.some((p) => new RegExp(p, "i").test(all));
 }
 
 /** True when the title is one the search wants: it matches an include pattern and no exclude pattern. */

@@ -4,7 +4,7 @@
  * end up in the CSV so a skipped job is explainable.
  */
 import { DISCOVER } from "../config.js";
-import { titleWanted, type Search } from "../profile/schema.js";
+import { locationWanted, titleWanted, type Search } from "../profile/schema.js";
 import { ageDays, type Job } from "./normalize.js";
 import { isWalled } from "./walled.js";
 
@@ -51,7 +51,7 @@ export function preFilter(
   /** True for a job on an account board where the person has an account, or let the tool make one. */
   mayApplyWithAccount: (url: string) => boolean = () => false,
   /** The profile's search, when it is not for software: the title test is then the candidate's own. */
-  search?: Pick<Search, "titleInclude" | "titleExclude">,
+  search?: Pick<Search, "titleInclude" | "titleExclude" | "locationInclude">,
 ): string | null {
   if (job.ats === "workday" && !mayApplyWithAccount(job.url)) return "workday (needs an account per company)";
   if (job.ats === "taleo" || job.ats === "oracle" || job.ats === "successfactors" || job.ats === "icims" || job.ats === "amazon") {
@@ -63,6 +63,7 @@ export function preFilter(
   if (age !== null && age > maxAgeDays) return `posted ${age} days ago`;
   if (search) {
     if (!titleWanted(job.title, search)) return "title is not one of the roles searched for";
+    if (!locationWanted(job.locations, search)) return "location is not open to the candidate's region";
   } else if (NON_SOFTWARE_TITLE.test(job.title) && !SOFTWARE_TITLE.test(job.title)) {
     return "title is not a software role";
   }
