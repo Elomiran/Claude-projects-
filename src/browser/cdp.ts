@@ -41,6 +41,8 @@ export async function ensureBrowser(): Promise<void> {
       "--disable-backgrounding-occluded-windows",
       "--disable-renderer-backgrounding",
       "--window-size=1280,1000",
+      // Extra flags for containers, e.g. JEV_CHROME_ARGS="--headless=new --no-sandbox".
+      ...(process.env.JEV_CHROME_ARGS ? process.env.JEV_CHROME_ARGS.split(/\s+/).filter(Boolean) : []),
       "about:blank",
     ],
     { detached: true, stdio: "ignore", env: childEnv() },

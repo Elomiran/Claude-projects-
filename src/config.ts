@@ -228,7 +228,7 @@ export const CACHE = {
 
 export const BROWSER = {
   /** The Chrome binary the fill runner drives over the DevTools protocol. */
-  chromePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  chromePath: process.env.JEV_CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
   /** Local DevTools port of the runner's own Chrome window. */
   port: 9333,
   /** Its profile lives with the other run data, so it is git-ignored and keeps cookies between runs. */
